@@ -1,0 +1,40 @@
+{
+    "env": [
+        {
+            "key": "MODAL_TOKEN_ID",
+            "required": true,
+            "description": "Modal token id",
+            "url": "https://modal.com/settings/tokens"
+        },
+        {
+            "key": "MODAL_TOKEN_SECRET",
+            "required": true,
+            "description": "Modal token secret (paired with MODAL_TOKEN_ID)"
+        },
+        {
+            "key": "HF_TOKEN",
+            "description": "Optional — VAST-AI/TripoSplat is public, not gated",
+            "url": "https://huggingface.co/settings/tokens"
+        },
+        {
+            "key": "TONGFLOW_MODAL_CALL_TIMEOUT_S",
+            "default": "2400",
+            "description": "Max seconds to wait for a Modal call"
+        },
+        {
+            "key": "TRIPOSPLAT_STEPS",
+            "default": "20",
+            "description": "Sampling steps"
+        },
+        {
+            "key": "TRIPOSPLAT_GUIDANCE_SCALE",
+            "default": "3.0",
+            "description": "Guidance scale"
+        },
+        {
+            "key": "TRIPOSPLAT_NUM_GAUSSIANS",
+            "default": "262144",
+            "description": "Gaussian count"
+        }
+    ]
+}
