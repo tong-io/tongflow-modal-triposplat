@@ -1,4 +1,9 @@
 {
+    "plugin": {
+        "name": "TripoSplat",
+        "description": "Turn a single image into a 3D Gaussian Splat with TripoSplat (Tripo AI).",
+        "icon": "/plugins/tongflow-modal-triposplat.svg"
+    },
     "env": [
         {
             "key": "MODAL_TOKEN_ID",
