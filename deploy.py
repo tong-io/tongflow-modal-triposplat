@@ -24,6 +24,11 @@ from tongflow.node_slots import NodeSlots
 from tongflow.protocol import asset, prompt_media_to_bytes
 from tongflow.slots import node_slot
 
+# Slots this plugin is the default implementation of: the node picker lists
+# it first and a newly added node preselects it. Read statically by the
+# scanner (never executed), so any SDK version imports this file fine.
+TONGFLOW_DEFAULT_SLOTS = ["image-gen-model"]
+
 # Weights are laid out on the volume mirroring the VAST-AI/TripoSplat HF repo.
 CKPTS = "/models/triposplat"
 CKPT_PATH = f"{CKPTS}/diffusion_models/triposplat_fp16.safetensors"
