@@ -60,7 +60,7 @@ TripoSplat-specific knobs are plugin constants in `deploy.py` (env-overridable),
 - **`TRIPOSPLAT_GUIDANCE_SCALE`** (default `3.0`) / **`TRIPOSPLAT_SHIFT`**
   (default `3.0`): CFG strength / timestep schedule shift.
 - **`deploy.py` `gpu`** (default `A100-40GB`): try the cheaper `L40S` once a run
-  succeeds; **`scaledown_window`** (default 5s) keeps the container warm between
+  succeeds; **`scaledown_window`** (default 2s) keeps the container warm between
   calls to skip cold-start model load (idle GPU is still billed).
 
 ## License & attribution
