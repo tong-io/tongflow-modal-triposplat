@@ -22,7 +22,34 @@ from tongflow import deploy
 from tongflow.models.image_gen_model import ImageGenModelInput, ImageGenModelOutput
 from tongflow.node_slots import NodeSlots
 from tongflow.protocol import asset, prompt_media_to_bytes
-from tongflow.slots import node_slot
+from tongflow.slots import current_params, node_slot
+
+
+def _adv(name: str, default):
+    """Advanced-section override (``TONGFLOW_SLOT_PARAMS``) or the plugin default."""
+    v = current_params().get(name)
+    if v is None:
+        return default
+    if isinstance(default, bool):
+        return bool(v)
+    if isinstance(default, int):
+        return int(v)
+    if isinstance(default, float):
+        return float(v)
+    return v
+
+# Per-run knobs offered under the node's collapsed "Advanced" section.
+# Pure literal (the platform scanner reads it by AST, never imports this
+# module). Values reach the handlers via current_params(); an untouched
+# control is absent there and falls back to the plugin default.
+TONGFLOW_SLOT_PARAMS = {
+    "image-gen-model": {
+        "steps": {"type": "integer", "default": 20, "min": 5, "max": 50, "label": "Steps"},
+        "guidance_scale": {"type": "number", "default": 3.0, "min": 0.0, "max": 10.0, "step": 0.5, "label": "Guidance scale"},
+        "num_gaussians": {"type": "select", "options": [65536, 131072, 262144, 524288], "default": 262144, "label": "Gaussians", "description": "More splats = finer detail, larger file."},
+        "erode_radius": {"type": "integer", "default": 1, "min": 0, "max": 5, "label": "Mask erode radius"},
+    },
+}
 
 # Slots this plugin is the default implementation of: the node picker lists
 # it first and a newly added node preselects it. Read statically by the
@@ -63,7 +90,7 @@ image = (
         extra_index_url="https://download.pytorch.org/whl/cu128",
     )
     .pip_install("numpy", "safetensors", "pillow", "tqdm")
-    .pip_install("tongflow==0.2.21", "fastapi[standard]")
+    .pip_install("tongflow==0.3.3", "fastapi[standard]")
     # PYTHONPATH so `from triposplat import TripoSplatPipeline` (which itself does
     # `from model import ...`) resolves against the vendored sources.
     .env({"HF_HOME": "/models/hf", "PYTHONPATH": "/opt/triposplat"})
@@ -123,11 +150,11 @@ class Inference:
                 gaussian, _prepared = self.pipe.run(
                     src,
                     seed=seed,
-                    steps=STEPS,
-                    guidance_scale=GUIDANCE_SCALE,
+                    steps=_adv("steps", STEPS),
+                    guidance_scale=_adv("guidance_scale", GUIDANCE_SCALE),
                     shift=SHIFT,
-                    num_gaussians=NUM_GAUSSIANS,
-                    erode_radius=ERODE_RADIUS,
+                    num_gaussians=_adv("num_gaussians", NUM_GAUSSIANS),
+                    erode_radius=_adv("erode_radius", ERODE_RADIUS),
                 )
                 out = os.path.join(td, "output.splat")
                 gaussian.save_splat(out)
