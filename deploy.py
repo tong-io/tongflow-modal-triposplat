@@ -90,7 +90,7 @@ image = (
         extra_index_url="https://download.pytorch.org/whl/cu128",
     )
     .pip_install("numpy", "safetensors", "pillow", "tqdm")
-    .pip_install("tongflow==0.3.3", "fastapi[standard]")
+    .pip_install("tongflow==1.0.0", "fastapi[standard]")
     # PYTHONPATH so `from triposplat import TripoSplatPipeline` (which itself does
     # `from model import ...`) resolves against the vendored sources.
     .env({"HF_HOME": "/models/hf", "PYTHONPATH": "/opt/triposplat"})
